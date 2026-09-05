@@ -88,6 +88,11 @@ class WasserstelleView extends WatchUi.View {
 
     // Called when location is updated
     function onLocationUpdate() as Void {
+        // Only act on first GPS fix, not continuous updates
+        if (_viewState != VIEW_STATE_ACQUIRING_GPS) {
+            return;
+        }
+
         if (_locationService != null && _locationService.hasPosition()) {
             // Got GPS, now search for water
             _viewState = VIEW_STATE_SEARCHING;
