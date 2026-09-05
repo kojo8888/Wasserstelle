@@ -8,6 +8,9 @@ export PATH="$SDK/bin:$PATH"
 sed -i '' 's/_useTestMode = true/_useTestMode = false/' source/WasserstelleView.mc
 
 # Build for all devices
+echo "Building for Edge 530..."
+monkeyc -f monkey.jungle -d edge530 -y developer_key.der -r -o bin/Wasserstelle-edge530.prg
+
 echo "Building for Edge 540..."
 monkeyc -f monkey.jungle -d edge540 -y developer_key.der -r -o bin/Wasserstelle-edge540.prg
 
