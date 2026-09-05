@@ -96,10 +96,10 @@ class OverpassService {
             System.println("Network error: " + responseCode);
             _lastErrorCode = responseCode;
 
-            // Try offline fallback for Munich area
-            if (_searchLat != null && _searchLon != null &&
-                OfflineData.isInMunichRange(_searchLat, _searchLon)) {
-                System.println("Using offline Munich data");
+            // Always try offline fallback for Munich area on any network error
+            // (GPS might be inaccurate indoors, so we try offline data regardless)
+            if (_searchLat != null && _searchLon != null) {
+                System.println("Network failed, trying offline Munich data");
                 loadOfflineData();
                 return;
             }
