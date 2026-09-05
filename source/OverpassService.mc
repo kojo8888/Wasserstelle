@@ -43,6 +43,7 @@ class OverpassService {
     private var _searchLat as Double?;
     private var _searchLon as Double?;
     private var _lastErrorCode as Number;
+    private var _usingOfflineData as Boolean;
 
     function initialize() {
         _state = STATE_IDLE;
@@ -50,6 +51,7 @@ class OverpassService {
         _nearestFountain = null;
         _callback = null;
         _lastErrorCode = 0;
+        _usingOfflineData = false;
     }
 
     // Fetch nearby drinking water sources
@@ -96,6 +98,15 @@ class OverpassService {
         if (responseCode != 200) {
             System.println("Network error: " + responseCode);
             _lastErrorCode = responseCode;
+
+            // Try offline fallback for Munich area
+            if (_searchLat != null && _searchLon != null &&
+                OfflineData.isInMunichRange(_searchLat, _searchLon)) {
+                System.println("Using offline Munich data");
+                loadOfflineData();
+                return;
+            }
+
             _state = STATE_ERROR_NETWORK;
             if (_callback != null) {
                 _callback.invoke();
@@ -199,11 +210,57 @@ class OverpassService {
         return _lastErrorCode;
     }
 
+    // Check if using offline data
+    function isUsingOfflineData() as Boolean {
+        return _usingOfflineData;
+    }
+
     // Reset state
     function reset() as Void {
         _state = STATE_IDLE;
         _fountains = null;
         _nearestFountain = null;
         _lastErrorCode = 0;
+        _usingOfflineData = false;
+    }
+
+    // Load offline Munich fountain data as fallback
+    private function loadOfflineData() as Void {
+        _usingOfflineData = true;
+        var offlineFountains = OfflineData.getMunichFountains();
+        _fountains = [];
+
+        for (var i = 0; i < offlineFountains.size(); i++) {
+            var coords = offlineFountains[i];
+            var lat = coords[0] as Double;
+            var lon = coords[1] as Double;
+
+            var fountain = new Fountain(lat, lon, null);
+
+            // Calculate distance from search position
+            if (_searchLat != null && _searchLon != null) {
+                var dist = GeoMath.calculateDistance(_searchLat, _searchLon, lat, lon);
+                fountain.distance = dist.toFloat();
+            }
+
+            _fountains.add(fountain);
+        }
+
+        // Sort by distance and find nearest
+        if (_fountains.size() > 0) {
+            _nearestFountain = _fountains[0];
+            for (var i = 1; i < _fountains.size(); i++) {
+                if (_fountains[i].distance < _nearestFountain.distance) {
+                    _nearestFountain = _fountains[i];
+                }
+            }
+            _state = STATE_SUCCESS;
+        } else {
+            _state = STATE_NO_RESULTS;
+        }
+
+        if (_callback != null) {
+            _callback.invoke();
+        }
     }
 }

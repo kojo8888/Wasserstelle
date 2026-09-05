@@ -305,6 +305,18 @@ class WasserstelleView extends WatchUi.View {
 
         drawArrow(dc, centerX, arrowY, arrowSize, displayBearing, currentlyHasHeading);
 
+        // Offline indicator
+        if (_overpassService != null && _overpassService.isUsingOfflineData()) {
+            dc.setColor(Graphics.COLOR_ORANGE, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(
+                10,
+                8,
+                Graphics.FONT_XTINY,
+                "OFFLINE",
+                Graphics.TEXT_JUSTIFY_LEFT
+            );
+        }
+
         // Heading mode indicator and cardinal direction
         if (currentlyHasHeading) {
             // Relative mode: show "REL" indicator in top-left
