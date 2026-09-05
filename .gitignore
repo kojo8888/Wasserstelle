@@ -1,0 +1,18 @@
+# Build outputs
+bin/
+*.prg
+
+# Developer keys (do not commit)
+*.pem
+*.der
+developer_key*
+
+# IDE
+.vscode/
+*.sublime-*
+
+# OS
+.DS_Store
+
+# Claude Code
+.claude/

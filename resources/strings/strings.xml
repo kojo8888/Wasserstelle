@@ -1,0 +1,12 @@
+<strings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
+    <string id="AppName">Wasserstelle</string>
+    <string id="AcquiringGPS">Acquiring GPS...</string>
+    <string id="Searching">Searching...</string>
+    <string id="Refreshing">Refreshing...</string>
+    <string id="NoGPS">No GPS Signal</string>
+    <string id="NoConnection">No Connection</string>
+    <string id="NoneFound">None within 1km</string>
+    <string id="ServiceError">Service Error</string>
+    <string id="PressSelect">Press SELECT to search</string>
+    <string id="Water">Water</string>
+</strings>
