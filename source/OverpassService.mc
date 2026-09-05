@@ -82,10 +82,7 @@ class OverpassService {
 
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
-            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON,
-            :headers => {
-                "Accept" => "application/json"
-            }
+            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
         Communications.makeWebRequest(url, null, options, method(:onResponse));
