@@ -74,14 +74,17 @@ class OverpassService {
         var query = "%5Bout%3Ajson%5D%5Btimeout%3A25%5D%3Bnode%5Bamenity%3Ddrinking_water%5D(" +
                     bbox + ")%3Bout%20body%205%3B";
 
-        var options = {
-            :method => Communications.HTTP_REQUEST_METHOD_GET,
-            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
-        };
-
         var url = API_URL + "?data=" + query;
 
         System.println("Fetching: " + url);
+
+        var options = {
+            :method => Communications.HTTP_REQUEST_METHOD_GET,
+            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON,
+            :headers => {
+                "Accept" => "application/json"
+            }
+        };
 
         Communications.makeWebRequest(url, null, options, method(:onResponse));
     }
