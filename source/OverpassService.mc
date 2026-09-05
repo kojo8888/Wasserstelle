@@ -42,12 +42,14 @@ class OverpassService {
     private var _callback as Method?;
     private var _searchLat as Double?;
     private var _searchLon as Double?;
+    private var _lastErrorCode as Number;
 
     function initialize() {
         _state = STATE_IDLE;
         _fountains = null;
         _nearestFountain = null;
         _callback = null;
+        _lastErrorCode = 0;
     }
 
     // Fetch nearby drinking water sources
@@ -90,6 +92,7 @@ class OverpassService {
 
         if (responseCode != 200) {
             System.println("Network error: " + responseCode);
+            _lastErrorCode = responseCode;
             _state = STATE_ERROR_NETWORK;
             if (_callback != null) {
                 _callback.invoke();
@@ -188,10 +191,16 @@ class OverpassService {
         return _fountains.size();
     }
 
+    // Get last error code for debugging
+    function getLastErrorCode() as Number {
+        return _lastErrorCode;
+    }
+
     // Reset state
     function reset() as Void {
         _state = STATE_IDLE;
         _fountains = null;
         _nearestFountain = null;
+        _lastErrorCode = 0;
     }
 }

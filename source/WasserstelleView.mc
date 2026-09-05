@@ -227,7 +227,8 @@ class WasserstelleView extends WatchUi.View {
                 break;
 
             case VIEW_STATE_NO_CONNECTION:
-                drawMessage(dc, WatchUi.loadResource(Rez.Strings.NoConnection) as String);
+                var errCode = (_overpassService != null) ? _overpassService.getLastErrorCode() : 0;
+                drawMessage(dc, "No Connection (" + errCode + ")");
                 break;
 
             case VIEW_STATE_NO_RESULTS:
